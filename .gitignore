@@ -1,0 +1,8 @@
+/build
+/bin
+/.project
+/.gradle
+/.settings
+/.classpath
+/*.dll
+/.maven

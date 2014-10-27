@@ -1,0 +1,41 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.jraf'
+archivesBaseName = 'jlibibuddy'
+version = '1.1'
+
+repositories {
+	mavenCentral()
+	maven {
+		url 'http://www.jraf.org/static/maven/2/'
+	}
+}
+
+configurations {
+	dll
+}
+
+dependencies {
+	compile 'libusbjava:libusbjava-jar:0.5.7'
+	dll 'libusbjava:libusbjava-native-win32:0.2.3.0'
+}
+
+task copyLib {
+	copy {
+	  from configurations.dll
+	  def artifact = configurations.dll.resolvedConfiguration.resolvedArtifacts
+	  def version = artifact.moduleVersion.id.version
+	  def regex = "libusbjava-native-.*-" + version[0] + ".(.*)"
+	  rename (regex, 'LibusbJava.$1')
+	  into "$projectDir"
+	}
+}
+
+build.dependsOn copyLib
+
+uploadArchives {
+	repositories.mavenDeployer {
+		repository(url: uri('.maven'))
+	}
+}
