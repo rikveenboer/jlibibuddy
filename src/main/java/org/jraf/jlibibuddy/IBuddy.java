@@ -125,11 +125,8 @@ public class IBuddy {
     private Device device;
 
     /*
-    Current i-Buddy state.
+     * i-Buddy's current state.
      */
-    private boolean open;
-    private boolean closed;
-
     private boolean heart;
     private boolean headBlue;
     private boolean headGreen;
@@ -208,17 +205,21 @@ public class IBuddy {
      * @param command the command byte.
      */
     private synchronized void sendMessage(byte command) throws IBuddyException {
+    	open();
         try {
             device.controlMsg(USB.REQ_TYPE_TYPE_CLASS | USB.REQ_TYPE_RECIP_INTERFACE, USB.REQ_SET_CONFIGURATION, 0x02, 0x01, INIT, INIT.length, 100, true);
         } catch (USBException e) {
+        	close();
             throw new IBuddyException("Could not send message to i-Buddy", e);
         }
         byte[] commandMessage = getCommandMessage(command);
         try {
             device.controlMsg(USB.REQ_TYPE_TYPE_CLASS | USB.REQ_TYPE_RECIP_INTERFACE, USB.REQ_SET_CONFIGURATION, 0x02, 0x01, commandMessage, commandMessage.length, 100, true);
         } catch (USBException e) {
+        	close();
             throw new IBuddyException("Could not send message to i-Buddy", e);
         }
+        close();
     }
 
     /**
@@ -493,53 +494,25 @@ public class IBuddy {
      *
      * @throws IBuddyException in case of problem while opening the usb device or if the i-Buddy was already open.
      */
-    public synchronized void open() throws IBuddyException {
-        if (open) {
-            throw new IBuddyException("i-Buddy is already open");
-        }
+    private synchronized void open() throws IBuddyException {
         device = USB.getDevice(DEVICE_VENDOR, DEVICE_PRODUCT);
         try {
             device.open(1, 0, 0);
         } catch (USBException e) {
             throw new IBuddyException("Could not open i-Buddy", e);
         }
-        sendAllOff();
-        open = true;
     }
 
     /**
-     * Closes the usb connection to the i-Buddy. If {@code reset} is {@code true}, the "turn eveything off" command is
-     * first sent.
+     * Closes the usb connection to the i-Buddy.
      *
-     * @throws IBuddyException in case of problem while closing the usb device or if the i-Buddy was already closed or
-     * if it was not open..
+     * @throws IBuddyException in case of problem while closing the usb device.
      */
-    public synchronized void close(boolean reset) throws IBuddyException {
-        if (closed) {
-            throw new IBuddyException("i-Buddy is already closed");
-        }
-        if (!open) {
-            throw new IBuddyException("i-Buddy is not open");
-        }
-        if (reset) {
-            sendAllOff();
-        }
+    private synchronized void close() throws IBuddyException {
         try {
             device.close();
         } catch (USBException e) {
             throw new IBuddyException("Could not close i-Buddy", e);
         }
-        open = false;
-        closed = true;
-    }
-
-    /**
-     * Closes the usb connection to the i-Buddy. The "turn eveything off" command is first sent.
-     *
-     * @throws IBuddyException in case of problem while closing the usb device or if the i-Buddy was already closed or
-     * if it was not open..
-     */
-    public synchronized void close() throws IBuddyException {
-        close(true);
     }
 }
