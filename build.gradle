@@ -18,17 +18,20 @@ configurations {
 
 dependencies {
 	compile 'libusbjava:libusbjava-jar:0.5.7'
-	dll 'libusbjava:libusbjava-native-win32:0.2.3.0'
+	runtime 'libusbjava:libusbjava-native-win32:0.2.3.0'
 }
 
 task copyLib {
-	copy {
-	  from configurations.dll
-	  def artifact = configurations.dll.resolvedConfiguration.resolvedArtifacts
-	  def version = artifact.moduleVersion.id.version
-	  def regex = "libusbjava-native-.*-" + version[0] + ".(.*)"
-	  rename (regex, 'LibusbJava.$1')
-	  into "$projectDir"
+	  configurations.runtime.resolvedConfiguration.resolvedArtifacts.each { ResolvedArtifact artifact ->
+		  switch (artifact.name) {
+			  case 'libusbjava-native-win32':
+		  		  copy {
+					from configurations.runtime
+					rename '.*', 'LibusbJava.dll'
+					into '.'
+				  }
+				  break
+		  }
 	}
 }
 
