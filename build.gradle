@@ -10,36 +10,17 @@ task wrapper(type: Wrapper) {
 }
 
 repositories {
-	mavenCentral()
 	maven {
-		url 'http://www.jraf.org/static/maven/2/'
+		url 'https://github.com/Boukefalos/jlibloader/raw/mvn-repo/'
 	}
-}
-
-configurations {
-	dll
+	maven {
+		url 'https://github.com/Boukefalos/jlibusb/raw/mvn-repo/'
+	}
 }
 
 dependencies {
-	compile 'libusbjava:libusbjava-jar:0.5.7'
-	runtime 'libusbjava:libusbjava-native-win32:0.2.3.0'
+	compile 'com.github.boukefalos:jlibusb:0.5.7'
 }
-
-task copyLib {
-	  configurations.runtime.resolvedConfiguration.resolvedArtifacts.each { ResolvedArtifact artifact ->
-		  switch (artifact.name) {
-			  case 'libusbjava-native-win32':
-		  		  copy {
-					from configurations.runtime
-					rename '.*', 'LibusbJava.dll'
-					into '.'
-				  }
-				  break
-		  }
-	}
-}
-
-build.dependsOn copyLib
 
 uploadArchives {
 	repositories.mavenDeployer {
