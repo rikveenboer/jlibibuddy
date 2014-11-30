@@ -2,13 +2,13 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jraf</groupId>
+  <groupId>com.github.boukefalos</groupId>
   <artifactId>jlibibuddy</artifactId>
   <version>1.1</version>
   <dependencies>
     <dependency>
-      <groupId>libusbjava</groupId>
-      <artifactId>libusbjava-jar</artifactId>
+      <groupId>com.github.boukefalos</groupId>
+      <artifactId>jlibusb</artifactId>
       <version>0.5.7</version>
       <scope>compile</scope>
     </dependency>
