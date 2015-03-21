@@ -20,11 +20,7 @@ Needs [Java libusb / libusb-win32](http://libusbjava.sourceforge.net/wp/?page_id
 
 Original maven repo http://www.jraf.org/static/maven/2/org/jraf/jlibibuddy/
 
-We need to create backup archives for artifacts **org.jraf:jlibibuddy:1.1** ([see](http://libusbjava.sourceforge.net/wp/) and the [sourceforge](http://sourceforge.net/projects/libusbjava/)) and **libusbjava:libusbjava-native-win32:0.2.3.0** which are hosted on a [private maven repository](http://www.JRAF.org/static/maven/2). The Libusbjava code have been forked:
-
-- [https://github.com/Boukefalos/libusbjava.cpp](https://github.com/Boukefalos/libusbjava.cpp)
-- [https://github.com/Boukefalos/libusbjava.java](https://github.com/Boukefalos/libusbjava.java)
-
+We need to create backup archives for artifacts **org.jraf:jlibibuddy:1.1** ([see](http://libusbjava.sourceforge.net/wp/) and the [sourceforge](http://sourceforge.net/projects/libusbjava/)) and **libusbjava:libusbjava-native-win32:0.2.3.0** which are hosted on a [private maven repository](http://www.JRAF.org/static/maven/2).
 
 tedious to get libusb working while porting to linux, use other project instead:
 
@@ -36,6 +32,8 @@ and we have te maven artifact in gradle
 
 
 ## Installation ##
+
+See <http://sourceforge.net/p/libusb-win32/wiki/Home/#installation>.
 
 For linux, use [libusb](http://sourceforge.net/projects/libusb/)?
 
