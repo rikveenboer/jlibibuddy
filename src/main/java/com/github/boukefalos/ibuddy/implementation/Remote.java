@@ -7,10 +7,12 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import org.jraf.jlibibuddy.IBuddyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.boukefalos.ibuddy.iBuddy;
+import com.github.boukefalos.ibuddy.exception.iBuddyException;
 
 public class Remote implements iBuddy {
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -21,6 +23,8 @@ public class Remote implements iBuddy {
 
 	public Remote(String host, int port) throws UnknownHostException{
 		inetAddress = InetAddress.getByName(host);
+		logger.debug(host);
+		logger.debug(String.valueOf(port));
 		this.port = port;
 	}
 
@@ -28,11 +32,12 @@ public class Remote implements iBuddy {
 		send("RED");
 	}
 
-	public void sendHeadGreen(boolean headGreen) {
+	public void setHeadGreen(boolean headGreen) {
+		System.out.println("oki");
 		send("GREEN");
 	}
 
-	public void sendHeadBlue(boolean headBlue) {
+	public void setHeadBlue(boolean headBlue) {
 		send("BLUE");
 	}
 
@@ -65,5 +70,17 @@ public class Remote implements iBuddy {
 			});
 		}
 		return true;
+	}
+
+	@Override
+	public void setHeadRed(boolean headRed) throws iBuddyException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void test() throws IBuddyException {
+		// TODO Auto-generated method stub
+		
 	}
 }

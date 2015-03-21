@@ -10,23 +10,21 @@ import org.jraf.jlibibuddy.IBuddy.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.boukefalos.ibuddy.Loader;
-import com.github.boukefalos.ibuddy.exception.LoaderException;
+import com.github.boukefalos.ibuddy.iBuddy;
 import com.github.boukefalos.ibuddy.exception.ServerException;
 import com.github.boukefalos.ibuddy.exception.iBuddyException;
 
 public class Server extends Thread {
     protected Logger logger = LoggerFactory.getLogger(getClass());
-    protected com.github.boukefalos.ibuddy.iBuddy iBuddy;
+    protected iBuddy iBuddy;
 	protected DatagramSocket diagramSocket;
 
-	public Server(int port) throws ServerException {
+	public Server(iBuddy iBuddy, int port) throws ServerException {
+		logger.debug(String.valueOf(port));
+		this.iBuddy = iBuddy;
 		try {
-			iBuddy = Loader.getiBuddy();
 			diagramSocket = new DatagramSocket(port);
 			return;
-		} catch (LoaderException e) {
-			logger.error("Failed to load iBuddy", e);
 		} catch (SocketException e) {
 			logger.error("Failed to initialize socket", e);
 		}
@@ -36,6 +34,7 @@ public class Server extends Thread {
 	@SuppressWarnings("incomplete-switch")
 	public void run() {
 		while (true) {
+			logger.debug("Wait for input");
 			byte[] buffer = new byte[1024];
 			DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
 			try {
@@ -43,16 +42,21 @@ public class Server extends Thread {
 			} catch (IOException e) {
 				logger.error("Failed to receive packet", e);
 			}
+			// Rewrite with protocol buffers!
 			String received = new String(datagramPacket.getData(), datagramPacket.getOffset(), datagramPacket.getLength());
+			
 			try {
 				Color color = IBuddy.Color.valueOf(received);
 				switch (color) {
 					case RED:
-						iBuddy.sendHeadRed(true);
+						iBuddy.setHeadRed(true);
+						break;
 					case GREEN:
-						iBuddy.sendHeadGreen(true);
+						iBuddy.setHeadGreen(true);
+						break;
 					case BLUE:
-						iBuddy.sendHeadBlue(true);
+						iBuddy.setHeadBlue(true);
+						break;
 				}
 			} catch (IllegalArgumentException e) {
 				logger.error("No such command", e);

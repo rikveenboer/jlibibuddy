@@ -22,7 +22,7 @@ public class Local implements iBuddy {
 		}
 	}
 
-	public void sendHeadGreen(boolean headGreen) throws iBuddyException {
+	public void setHeadGreen(boolean headGreen) throws iBuddyException {
 		try {
 			IBuddy.sendHeadGreen(headGreen);
 		} catch (IBuddyException e) {
@@ -31,12 +31,24 @@ public class Local implements iBuddy {
 		
 	}
 
-	public void sendHeadBlue(boolean headBlue) throws iBuddyException {
+	public void setHeadBlue(boolean headBlue) throws iBuddyException {
 		try {
 			IBuddy.sendHeadBlue(headBlue);
 		} catch (IBuddyException e) {
 			throw new iBuddyException();
 		}
+		
+	}
+
+	@Override
+	public void setHeadRed(boolean headRed) throws iBuddyException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void test() throws IBuddyException {
+		IBuddy.sendAllOff();
 		
 	}
 }
