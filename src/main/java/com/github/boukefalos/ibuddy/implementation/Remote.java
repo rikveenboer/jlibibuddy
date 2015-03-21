@@ -1,5 +1,6 @@
 package com.github.boukefalos.ibuddy.implementation;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,8 +12,18 @@ import org.jraf.jlibibuddy.IBuddyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+
+
+
+
 import com.github.boukefalos.ibuddy.iBuddy;
 import com.github.boukefalos.ibuddy.exception.iBuddyException;
+
+import ibuddy.Ibuddy.Color;
+import ibuddy.Ibuddy.Command;
+import ibuddy.Ibuddy.Command.Type;
+import ibuddy.Ibuddy.SetLed;
 
 public class Remote implements iBuddy {
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -28,8 +39,21 @@ public class Remote implements iBuddy {
 		this.port = port;
 	}
 
-	public void sendHeadRed(boolean headRed) {
-		send("RED");
+	public void setHeadRed(boolean headRed) {
+		Command command = Command.newBuilder()
+	        	.setType(Type.SET_LED)
+	        	.setSetLed(
+	        		SetLed.newBuilder()
+	        			.setColor(Color.RED)
+	        			.setPos(0).build()).build();
+
+			ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
+			try {
+				command.writeDelimitedTo(output);
+				send(output.toByteArray());
+			} catch (IOException e) {
+				logger.error("Failed to send command");
+		}
 	}
 
 	public void setHeadGreen(boolean headGreen) {
@@ -72,11 +96,6 @@ public class Remote implements iBuddy {
 		return true;
 	}
 
-	@Override
-	public void setHeadRed(boolean headRed) throws iBuddyException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void test() throws IBuddyException {

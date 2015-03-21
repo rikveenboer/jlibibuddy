@@ -1,5 +1,10 @@
 package com.github.boukefalos.ibuddy.server;
 
+import ibuddy.Ibuddy.Command;
+import ibuddy.Ibuddy.Command.Type;
+import ibuddy.Ibuddy.SetLed;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -42,24 +47,24 @@ public class Server extends Thread {
 			} catch (IOException e) {
 				logger.error("Failed to receive packet", e);
 			}
-			// Rewrite with protocol buffers!
-			String received = new String(datagramPacket.getData(), datagramPacket.getOffset(), datagramPacket.getLength());
-			
+			ByteArrayInputStream input = new ByteArrayInputStream(buffer);
+			logger.debug("Received input");
 			try {
-				Color color = IBuddy.Color.valueOf(received);
-				switch (color) {
-					case RED:
-						iBuddy.setHeadRed(true);
-						break;
-					case GREEN:
-						iBuddy.setHeadGreen(true);
-						break;
-					case BLUE:
-						iBuddy.setHeadBlue(true);
-						break;
+				Command command = Command.parseDelimitedFrom(input);
+				logger.debug("Command type = " + command.getType().name());
+				switch (command.getType()) {
+					case SET_LED:
+						SetLed setLed = command.getSetLed();
+						logger.debug("Color = " + setLed.getColor().name());
+						switch (setLed.getColor()) {
+							case RED:
+							iBuddy.setHeadRed(true);
+						}
+						break;				
 				}
-			} catch (IllegalArgumentException e) {
-				logger.error("No such command", e);
+			} catch (IOException e) {
+				logger.error("Failed to parse input");
+				return;
 			} catch (iBuddyException e) {
 				logger.error("Failed to send command to iBuddy", e);
 			}

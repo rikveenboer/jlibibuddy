@@ -40,15 +40,16 @@ public class Local implements iBuddy {
 		
 	}
 
-	@Override
 	public void setHeadRed(boolean headRed) throws iBuddyException {
-		// TODO Auto-generated method stub
+		try {
+			IBuddy.sendHeadRed(headRed);
+		} catch (IBuddyException e) {
+			throw new iBuddyException();
+		}
 		
 	}
 
-	@Override
 	public void test() throws IBuddyException {
-		IBuddy.sendAllOff();
-		
+		IBuddy.sendAllOff();		
 	}
 }

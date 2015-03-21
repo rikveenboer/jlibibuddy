@@ -30,7 +30,7 @@ public class TestCommunication {
 			Server server = localLoader.getServer();
 
 			server.start();
-			remoteiBuddy.setHeadGreen(true);
+			remoteiBuddy.setHeadRed(true);
 			Thread.sleep(10000);
 		} catch (Exception e) {
 			e.printStackTrace();
