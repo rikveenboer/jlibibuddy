@@ -32,8 +32,8 @@ repositories {
 }
 
 dependencies {
-	compile 'org.slf4j:slf4j-api:1.+'
-	compile 'org.slf4j:slf4j-log4j12:1.+'
+	compile 'org.slf4j:slf4j-api:1.7.12'
+	compile 'org.slf4j:slf4j-log4j12:1.7.12'
 	compile 'org.picocontainer:picocontainer:2.15'
 	compile 'com.github.boukefalos:jlibusb:0.5.7'
 }
@@ -41,5 +41,18 @@ dependencies {
 uploadArchives {
 	repositories.mavenDeployer {
 		repository(url: uri('.maven'))
+	}
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = [ 'src/main/java' ]
+		}
+	}
+	generated {
+		java {
+			srcDirs = [ 'build/generated/java' ]
+		}
 	}
 }
