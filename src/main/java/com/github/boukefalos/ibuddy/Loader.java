@@ -1,34 +1,27 @@
 package com.github.boukefalos.ibuddy;
 
-import java.io.IOException;
 import java.util.Properties;
 
-import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.parameters.ConstantParameter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import base.loader.AbstractLoader;
 import base.work.Work;
 
 import com.github.boukefalos.ibuddy.client.iBuddyTcpClient;
 import com.github.boukefalos.ibuddy.implementation.LocalImplementation;
 import com.github.boukefalos.ibuddy.implementation.TcpImplementation;
 import com.github.boukefalos.ibuddy.implementation.UdpImplementation;
+import com.github.boukefalos.ibuddy.server.iBuddyServer;
 import com.github.boukefalos.ibuddy.server.iBuddyTcpServer;
 import com.github.boukefalos.ibuddy.server.iBuddyUdpServer;
-import com.github.boukefalos.ibuddy.server.iBuddyServer;
 
-public class Loader {
+public class Loader extends AbstractLoader {
     protected static final String PROPERTIES_FILE = "ibuddy.properties";
-	protected Logger logger = LoggerFactory.getLogger(Loader.class);
-    protected MutablePicoContainer pico;
 
 	public Loader(Properties properties) {
-		/* Initialise container */
-		pico = new DefaultPicoContainer();
-	
+		super();
+
 		/* Add implementation */
 		switch (properties.getProperty("implementation")) {
 			case "local":
@@ -71,19 +64,6 @@ public class Loader {
 			}
 			
 		}
-	}
-
-    public static Loader getLoader() throws IOException {
-    	return getLoader(PROPERTIES_FILE);    	
-    }
-
-	public static Loader getLoader(String propertiesFile) throws IOException {
-		/* Read properties file */
-		Properties properties = new Properties();
-		properties.load(Loader.class.getClassLoader().getResourceAsStream(propertiesFile));
-
-		/* Initialise loader */
-		return new Loader(properties);
 	}
 
     public iBuddy getiBuddy() {
