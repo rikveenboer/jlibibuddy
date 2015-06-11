@@ -1,4 +1,5 @@
 package test;
+
 import com.github.boukefalos.ibuddy.Loader;
 
 public class TestProperties {

@@ -10,9 +10,15 @@ import org.picocontainer.parameters.ConstantParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.boukefalos.ibuddy.implementation.Local;
-import com.github.boukefalos.ibuddy.implementation.Remote;
-import com.github.boukefalos.ibuddy.server.Server;
+import base.work.Work;
+
+import com.github.boukefalos.ibuddy.client.iBuddyTcpClient;
+import com.github.boukefalos.ibuddy.implementation.LocalImplementation;
+import com.github.boukefalos.ibuddy.implementation.TcpImplementation;
+import com.github.boukefalos.ibuddy.implementation.UdpImplementation;
+import com.github.boukefalos.ibuddy.server.iBuddyTcpServer;
+import com.github.boukefalos.ibuddy.server.iBuddyUdpServer;
+import com.github.boukefalos.ibuddy.server.iBuddyServer;
 
 public class Loader {
     protected static final String PROPERTIES_FILE = "ibuddy.properties";
@@ -24,21 +30,46 @@ public class Loader {
 		pico = new DefaultPicoContainer();
 	
 		/* Add implementation */
-		if (properties.getProperty("implementation").equals("local")) {
-			/* Local */
-			pico.addComponent(Local.class);
-		} else {
-			/* Remote */
-			pico.addComponent(Remote.class, Remote.class, new Parameter[]{
-				new ConstantParameter(properties.getProperty("remote.host")),
-				new ConstantParameter(Integer.valueOf(properties.getProperty("remote.port")))});
+		switch (properties.getProperty("implementation")) {
+			case "local":
+				pico.addComponent(LocalImplementation.class);
+				break;				
+			case "remote":
+				//pico.addComponent(Remote.class);
+				break;
 		}
-	
+
+		/* Add protocol */
+		if (properties.getProperty("protocol") != null) {
+			switch (properties.getProperty("protocol")) {
+				case "tcp":
+					pico.addComponent(TcpImplementation.class, TcpImplementation.class, new Parameter[]{
+						new ConstantParameter(properties.getProperty("remote.host")),
+						new ConstantParameter(Integer.valueOf(properties.getProperty("remote.port")))});
+					break;
+				case "udp":
+					pico.addComponent(UdpImplementation.class, UdpImplementation.class, new Parameter[] {
+						new ConstantParameter(properties.getProperty("remote.host")),
+						new ConstantParameter(Integer.valueOf(properties.getProperty("remote.port")))});
+					break;
+			}
+		}
+
 		/* Add server */
 		if (properties.getProperty("server") != null) {
-			pico.addComponent(Server.class, Server.class, new Parameter[]{
-				new ConstantParameter(getiBuddy()),
-				new ConstantParameter(Integer.valueOf(properties.getProperty("server.port")))});
+			switch (properties.getProperty("server.protocol")) {
+				case "tcp":
+					pico.addComponent(iBuddyTcpServer.class, iBuddyTcpServer.class, new Parameter[]{
+						new ConstantParameter(getiBuddy()),
+						new ConstantParameter(Integer.valueOf(properties.getProperty("server.port"))),
+						new ConstantParameter(iBuddyTcpClient.class)});
+					break;
+				case "udp":
+					pico.addComponent(iBuddyUdpServer.class, iBuddyUdpServer.class, new Parameter[]{
+						new ConstantParameter(getiBuddy()),
+						new ConstantParameter(Integer.valueOf(properties.getProperty("server.port")))});
+			}
+			
 		}
 	}
 
@@ -59,8 +90,8 @@ public class Loader {
     	return pico.getComponent(iBuddy.class);
     }
 
-    public Server getServer() {
-    	return pico.getComponent(Server.class);
+    public Work getServer() {
+    	return (Work) pico.getComponent(iBuddyServer.class);
     }
 
 }

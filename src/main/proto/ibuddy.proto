@@ -1,52 +1,82 @@
-package ibuddy;
+package proto;
 
-enum Color {
-    GREEN = 1;
-    RED = 2;
-    BOTH = 3;
-    NONE = 4;
+enum Type {
+    STATE = 1;
+    HEAD = 2;
+    WINGS = 3;
+    ROTATE = 4;
+    HEART = 5;
+    BLINK = 6;
+    NUDGE = 7;
+    FLAP = 8;
 }
 
-enum Module {
-    TM1638 = 1;
-    InvertedTM1638 = 2;
-    TM1640 = 3;
+enum State {
+    ON = 1;
+    OFF = 2;
+}
+
+enum Direction {
+    CENTER = 1;
+    DOWN = 2;
+    UP = 3;
+    LEFT = 4;
+    RIGHT = 5;
+}
+
+enum Color {
+	NONE = 1;
+    RED = 2;
+    GREEN = 3;
+    BLUE = 4;
+    YELLOW = 5;
+    PURPLE = 6;
+    CYAN = 7;
+    WHITE = 8;
+}
+
+message Head {
+	required State state = 1;
+	required bool single = 2;	
+    required Color color = 3;
+}
+
+message Wings {
+	required Direction direction = 1;
+}
+
+message Rotate {
+	required Direction direction = 1;
+}
+
+message Heart {
+	required State state = 1;
+}
+
+message Blink {
+    required int32 onTime = 1;
+    required int32 offTime = 2;
+    required int32 times = 3;    
+    optional Color color = 4;
+}
+
+message Nudge {
+    required int32 delay = 1;
+    required int32 times = 2;
+}
+
+message Flap {
+    required int32 delay = 1;
+    required int32 times = 2;
 }
 
 message Command {
-    enum Type {
-        PING = 1;
-        CONSTRUCT = 2;
-        SET_LED = 10;
-    }
-
     required Type type = 1;
-    optional Ping ping = 2;
-    optional Construct construct = 3;
-    optional SetLed setLed = 10;
-}
-
-message Ping {
-    required int32 id = 1;
-}
-
-message Echo {
-    required int32 id = 1;
-    optional string message = 2;
-}
-
-message Construct {
-	required int32 dataPin = 1;
-	required int32 clockPin = 2;
-	optional int32 strobePin = 3;
-    optional bool activateDisplay = 4 [default = true];
-    optional int32 intensity = 5 [default = 7];
-    optional Module module = 6 [default = TM1638];
-    optional int32 id = 7 [default = 0];
-}
-
-message SetLed {
-    required Color color = 1;
-    required int32 pos = 2;
-    optional int32 id = 3 [default = 1];
+    optional Head head = 2;
+    optional Wings wings = 3;
+    optional Rotate rotate = 4;
+    optional Heart heart = 5;
+    optional Blink blink = 6;
+    optional Nudge nudge = 7;
+    optional Flap flap = 8;
 }
