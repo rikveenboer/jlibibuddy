@@ -23,7 +23,15 @@ public class Loader extends AbstractLoader<Loader> {
 				pico.addComponent(Remote.class);
 
 				/* Add sender implementation */
-				addSender(properties);
+				try {
+					String protocol = properties.getOrDefault("protocol", "tcp").toString();
+					String implementation = properties.getOrDefault("tcp.implementation", "socket").toString();
+					String host = properties.getProperty("remote.host");
+					int port = Integer.valueOf(properties.getProperty("remote.port"));
+					addSender(protocol, implementation, host, port);
+				} catch (NumberFormatException e) {
+					throw new LoaderException("Failed to parse remote.port");
+				}	
 				break;
 		}
 
@@ -31,8 +39,15 @@ public class Loader extends AbstractLoader<Loader> {
 		if (properties.getProperty("server") != null) {
 			pico.addComponent(Server.class);
 
-			/* Add server forwarder implementation */
-			addForwarder(properties);			
+			/* Add server forwarder implementation */			
+			try {
+				String protocol = properties.getOrDefault("server.protocol", "tcp").toString();
+				String implementation = properties.getOrDefault("tcp.implementation", "socket").toString();
+				int port = Integer.valueOf(properties.getProperty("server.port"));
+				addForwarder(protocol, implementation, port);
+			} catch (NumberFormatException e) {
+				throw new LoaderException("Failed to parse server.port");
+			}	
 		}
 	}
 

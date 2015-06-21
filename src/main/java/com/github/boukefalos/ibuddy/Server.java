@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import org.jraf.jlibibuddy.IBuddyException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import proto.Ibuddy.Blink;
 import proto.Ibuddy.Color;
@@ -14,31 +12,15 @@ import proto.Ibuddy.Flap;
 import proto.Ibuddy.Head;
 import proto.Ibuddy.Nudge;
 import proto.Ibuddy.State;
-import base.Control;
 import base.receiver.Forwarder;
-import base.receiver.Receiver;
+import base.server.forwarder.AbstractReceiver;
 
-public class Server implements Receiver, Control {
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+public class Server extends AbstractReceiver {
 	protected iBuddy iBuddy;
-	protected Forwarder forwarder;
 
 	public Server(iBuddy iBuddy, Forwarder forwarder) {
+		super(forwarder);
 		this.iBuddy = iBuddy;
-		this.forwarder = forwarder;
-		forwarder.register(this);
-	}
-
-	public void start() {
-		forwarder.start();		
-	}
-
-	public void stop() {
-		forwarder.stop();		
-	}
-
-	public void exit() {
-		forwarder.exit();		
 	}
 
 	public void receive(byte[] buffer) {

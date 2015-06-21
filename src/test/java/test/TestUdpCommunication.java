@@ -13,6 +13,7 @@ public class TestUdpCommunication {
 		try {
 			Properties localProperties = new Properties();
 			localProperties.setProperty("implementation", "local");
+			localProperties.setProperty("protocol", "udp");
 			localProperties.setProperty("server", "true");
 			localProperties.setProperty("server.port", "8883");
 			localProperties.setProperty("server.protocol", "udp");

@@ -33,7 +33,7 @@ public class TestTcpCommunication {
 			server.start();
 			iBuddy.start();
 
-			iBuddy.setHead(Color.BLUE);
+			iBuddy.setHead(Color.GREEN);
 
 			server.exit();
 			iBuddy.exit();
