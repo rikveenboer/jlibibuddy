@@ -1,4 +1,4 @@
-package com.github.boukefalos.ibuddy.helper;
+package com.github.boukefalos.ibuddy;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,13 +14,34 @@ import proto.Ibuddy.Flap;
 import proto.Ibuddy.Head;
 import proto.Ibuddy.Nudge;
 import proto.Ibuddy.State;
+import base.Control;
+import base.receiver.Forwarder;
+import base.receiver.Receiver;
 
-import com.github.boukefalos.ibuddy.iBuddy;
+public class Server implements Receiver, Control {
+	protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected iBuddy iBuddy;
+	protected Forwarder forwarder;
 
-public class ServerHelper {
-	protected static Logger logger = LoggerFactory.getLogger(ServerHelper.class);
+	public Server(iBuddy iBuddy, Forwarder forwarder) {
+		this.iBuddy = iBuddy;
+		this.forwarder = forwarder;
+		forwarder.register(this);
+	}
 
-	public static void receive(iBuddy iBuddy, byte[] buffer) {
+	public void start() {
+		forwarder.start();		
+	}
+
+	public void stop() {
+		forwarder.stop();		
+	}
+
+	public void exit() {
+		forwarder.exit();		
+	}
+
+	public void receive(byte[] buffer) {
 		ByteArrayInputStream input = new ByteArrayInputStream(buffer);
 		logger.debug("Received input");
 		try {

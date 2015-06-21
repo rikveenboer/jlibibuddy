@@ -1,12 +1,12 @@
 package com.github.boukefalos.ibuddy;
 
-
 import org.jraf.jlibibuddy.IBuddyException;
 
 import proto.Ibuddy.Color;
 import proto.Ibuddy.Direction;
+import base.Control;
 
-public interface iBuddy {
+public interface iBuddy extends Control {
 	public void setHeart(boolean on) throws IBuddyException;
 	public void setHeadRed(boolean on) throws IBuddyException;
 	public void setHeadBlue(boolean on) throws IBuddyException;
@@ -21,7 +21,7 @@ public interface iBuddy {
 	public void setRotateCenter() throws IBuddyException;
 	public void setRotate(Direction direction) throws IBuddyException;	
 	public void off() throws IBuddyException;
-	public void blink(Color color, long onTime, long offTime, int times) throws IBuddyException;
-	public void nudge(long delay, int times) throws IBuddyException;
-	public void flap(long delay, int times) throws IBuddyException;
+	public void blink(Color color, int onTime, int offTime, int times) throws IBuddyException;
+	public void nudge(int delay, int times) throws IBuddyException;
+	public void flap(int delay, int times) throws IBuddyException;
 }

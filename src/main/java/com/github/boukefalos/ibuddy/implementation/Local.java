@@ -9,13 +9,17 @@ import proto.Ibuddy.Direction;
 
 import com.github.boukefalos.ibuddy.iBuddy;
 
-public class LocalImplementation implements iBuddy {
+public class Local implements iBuddy {
 	IBuddy IBuddy;
 
 	@SuppressWarnings("static-access")
-	public LocalImplementation() {
+	public Local() {
 		IBuddy = IBuddy.getIBuddy();
 	}
+
+	public void start() {}
+	public void stop() {}
+	public void exit() {}
 
 	public void setHeadRed(boolean on) throws IBuddyException {
 		IBuddy.sendHeadRed(on);		
@@ -92,15 +96,15 @@ public class LocalImplementation implements iBuddy {
 		IBuddy.sendAllOff();		
 	}
 
-	public void blink(Color color, long onTime, long offTime, int times) throws IBuddyException {
+	public void blink(Color color, int onTime, int offTime, int times) throws IBuddyException {
 		IBuddyUtils.blink(IBuddy, mapColor(color), onTime, offTime, times);
 	}
 
-	public void nudge(long delay, int times) throws IBuddyException {
+	public void nudge(int delay, int times) throws IBuddyException {
 		IBuddyUtils.nudge(IBuddy, delay, times);		
 	}
 
-	public void flap(long delay, int times) throws IBuddyException {
+	public void flap(int delay, int times) throws IBuddyException {
 		IBuddyUtils.flap(IBuddy, delay, times);		
 	}
 

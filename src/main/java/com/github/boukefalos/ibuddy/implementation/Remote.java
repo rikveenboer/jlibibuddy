@@ -1,4 +1,4 @@
-package com.github.boukefalos.ibuddy.helper;
+package com.github.boukefalos.ibuddy.implementation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,26 +19,43 @@ import proto.Ibuddy.Rotate;
 import proto.Ibuddy.State;
 import proto.Ibuddy.Type;
 import proto.Ibuddy.Wings;
+import base.Control;
 import base.sender.Sender;
 
+import com.github.boukefalos.ibuddy.iBuddy;
 
-public class SenderHelper {
+public class Remote implements iBuddy, Control {
 	protected final static int BUFFER_SIZE = 1024;
-	protected static Logger logger = LoggerFactory.getLogger(SenderHelper.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
+	protected Sender sender;
 
-	public static void setHeart(Sender sender, boolean on) throws IBuddyException {
-		send(
-			sender,
+	public Remote(Sender sender) {
+		this.sender = sender;
+	}
+
+	public void start() {
+		sender.start();		
+	}
+
+	public void stop() {
+		sender.stop();		
+	}
+
+	public void exit() {
+		sender.exit();		
+	}
+
+	public void setHeart(boolean on) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.HEART)
 	        	.setHeart(Heart.newBuilder()
     				.setState(mapState(on))).build());		
 	}
 
-	public static void setHeadRed(Sender sender, boolean on) throws IBuddyException {
-		send(
-			sender,
+	public void setHeadRed(boolean on) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.HEAD)
 	        	.setHead(Head.newBuilder()
@@ -47,10 +64,8 @@ public class SenderHelper {
 					.setColor(Color.RED)).build());
 	}
 
-
-	public static void setHeadBlue(Sender sender, boolean on) throws IBuddyException {
-		send(
-			sender,
+	public void setHeadBlue(boolean on) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.HEAD)
 	        	.setHead(Head.newBuilder()
@@ -60,9 +75,8 @@ public class SenderHelper {
 	}
 
 
-	public static void setHeadGreen(Sender sender, boolean on) throws IBuddyException {
-		send(
-			sender,
+	public void setHeadGreen(boolean on) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.HEAD)
 	        	.setHead(Head.newBuilder()
@@ -71,76 +85,65 @@ public class SenderHelper {
 					.setColor(Color.GREEN)).build());
 	}
 
-
-	public static void setHead(Sender sender, Color color) throws IBuddyException {
+	public void setHead(Color color) throws IBuddyException {
 		State state = mapState(!color.equals(Color.NONE));
-		send(
-			sender,
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.HEAD)
 	        	.setHead(Head.newBuilder()
         			.setState(state)
 					.setSingle(false)
 					.setColor(color)).build());
-		
 	}
 
-
-	public static void setWingsUp(Sender sender) throws IBuddyException {
-		setWings(sender, Direction.UP);	
+	public void setWingsUp() throws IBuddyException {
+		setWings(Direction.UP);	
 	}
 
-	public static void setWingsDown(Sender sender) throws IBuddyException {
-		setWings(sender, Direction.DOWN);	
+	public void setWingsDown() throws IBuddyException {
+		setWings(Direction.DOWN);	
 	}
 
-
-	public static void setWingsCenter(Sender sender) throws IBuddyException {
-		setWings(sender, Direction.CENTER);
+	public void setWingsCenter() throws IBuddyException {
+		setWings(Direction.CENTER);
 	}
 
-	public static void setWings(Sender sender, Direction direction) throws IBuddyException {
-		send(
-			sender,
+	public void setWings(Direction direction) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.WINGS)
 	        	.setWings(Wings.newBuilder()
         			.setDirection(direction)).build());	
-		
 	}
 
-	public static void setRotateLeft(Sender sender) throws IBuddyException {
-		setRotate(sender, Direction.LEFT);		
+	public void setRotateLeft() throws IBuddyException {
+		setRotate(Direction.LEFT);		
 	}
 
-	public static void setRotateRight(Sender sender) throws IBuddyException {
-		setRotate(sender, Direction.RIGHT);		
+	public void setRotateRight() throws IBuddyException {
+		setRotate(Direction.RIGHT);		
 	}
 
-	public static void setRotateCenter(Sender sender) throws IBuddyException {
-		setRotate(sender, Direction.CENTER);		
+	public void setRotateCenter() throws IBuddyException {
+		setRotate(Direction.CENTER);		
 	}
 
-	public static void setRotate(Sender sender, Direction direction) throws IBuddyException {
-		send(
-			sender,
+	public void setRotate(Direction direction) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.ROTATE)
 	        	.setRotate(Rotate.newBuilder()
         			.setDirection(direction)).build());
 	}
 
-
-	public static void off(Sender sender) throws IBuddyException {
-		send(
-			sender,
+	public void off() throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.STATE).build());		
 	}
 
-	public static void blink(Sender sender, Color color, int onTime, int offTime, int times)	throws IBuddyException {
-		send(
-			sender,
+	public void blink(Color color, int onTime, int offTime, int times)	throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.BLINK)
 	        	.setBlink(Blink.newBuilder()
@@ -149,9 +152,8 @@ public class SenderHelper {
         			.setTimes(times)).build());
 	}
 
-	public static void nudge(Sender sender, int delay, int times) throws IBuddyException {
-		send(
-			sender,
+	public void nudge(int delay, int times) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.NUDGE)
 	        	.setNudge(Nudge.newBuilder()
@@ -159,10 +161,8 @@ public class SenderHelper {
         			.setTimes(times)).build());		
 	}
 
-
-	public static void flap(Sender sender, int delay, int times) throws IBuddyException {
-		send(
-			sender,
+	public void flap(int delay, int times) throws IBuddyException {
+		send(			
 			Command.newBuilder()
 	        	.setType(Type.FLAP)
 	        	.setFlap(Flap.newBuilder()
@@ -174,7 +174,7 @@ public class SenderHelper {
 		return on ? State.ON : State.OFF;
 	}
 
-	protected static void send(Sender sender, Command command) {
+	protected void send(Command command) {
 		ByteArrayOutputStream output = new ByteArrayOutputStream(BUFFER_SIZE);
 		try {
 			command.writeDelimitedTo(output);

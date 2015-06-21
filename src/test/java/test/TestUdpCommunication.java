@@ -2,9 +2,10 @@ package test;
 
 import java.util.Properties;
 
-import base.work.Work;
+import proto.Ibuddy.Color;
 
 import com.github.boukefalos.ibuddy.Loader;
+import com.github.boukefalos.ibuddy.Server;
 import com.github.boukefalos.ibuddy.iBuddy;
 
 public class TestUdpCommunication {
@@ -25,17 +26,16 @@ public class TestUdpCommunication {
 			Loader localLoader = new Loader(localProperties);
 			Loader remoteLoader = new Loader(remoteProperties);
 
-			iBuddy localiBuddy = localLoader.getiBuddy();
-			iBuddy remoteiBuddy = remoteLoader.getiBuddy();
+			iBuddy iBuddy = remoteLoader.getiBuddy();			
+			Server server = localLoader.getServer();
 
-			localiBuddy.setHeadRed(false);
-			
-			Work server = localLoader.getServer();
-
+			iBuddy.start();
 			server.start();
-			remoteiBuddy.setHeadRed(true);
-			Thread.sleep(1000);
+
+			iBuddy.setHead(Color.WHITE);
+
 			server.exit();
+			iBuddy.exit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	

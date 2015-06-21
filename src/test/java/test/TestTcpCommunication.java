@@ -3,9 +3,9 @@ package test;
 import java.util.Properties;
 
 import proto.Ibuddy.Color;
-import base.work.Work;
 
 import com.github.boukefalos.ibuddy.Loader;
+import com.github.boukefalos.ibuddy.Server;
 import com.github.boukefalos.ibuddy.iBuddy;
 
 public class TestTcpCommunication {
@@ -16,6 +16,7 @@ public class TestTcpCommunication {
 			localProperties.setProperty("server", "true");
 			localProperties.setProperty("server.port", "8883");
 			localProperties.setProperty("server.protocol", "tcp");
+			localProperties.setProperty("tcp.implementation", "socket");
 
 			Properties remoteProperties = new Properties();
 			remoteProperties.setProperty("implementation", "remote");
@@ -26,15 +27,16 @@ public class TestTcpCommunication {
 			Loader localLoader = new Loader(localProperties);
 			Loader remoteLoader = new Loader(remoteProperties);
 
-			iBuddy localiBuddy = localLoader.getiBuddy();
-			iBuddy remoteiBuddy = remoteLoader.getiBuddy();
-			//localiBuddy.setHead(Color.WHITE);
- 
-			Work server = localLoader.getServer();
+			Server server = localLoader.getServer();
+			iBuddy iBuddy = remoteLoader.getiBuddy();
+
 			server.start();
-			remoteiBuddy.setHeadRed(true);
-			Thread.sleep(1000);
-			//server.exit();
+			iBuddy.start();
+
+			iBuddy.setHead(Color.BLUE);
+
+			server.exit();
+			iBuddy.exit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
