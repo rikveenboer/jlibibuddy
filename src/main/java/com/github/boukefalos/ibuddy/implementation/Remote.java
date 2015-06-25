@@ -20,7 +20,7 @@ import proto.Ibuddy.State;
 import proto.Ibuddy.Type;
 import proto.Ibuddy.Wings;
 import base.Control;
-import base.sender.Sender;
+import base.Sender;
 
 import com.github.boukefalos.ibuddy.iBuddy;
 

@@ -12,8 +12,8 @@ import proto.Ibuddy.Flap;
 import proto.Ibuddy.Head;
 import proto.Ibuddy.Nudge;
 import proto.Ibuddy.State;
-import base.receiver.Forwarder;
-import base.server.forwarder.AbstractReceiver;
+import base.Forwarder;
+import base.server.receiver.AbstractReceiver;
 
 public class Server extends AbstractReceiver {
 	protected iBuddy iBuddy;
