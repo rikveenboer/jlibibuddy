@@ -205,18 +205,18 @@ public class IBuddy {
      * @param command the command byte.
      */
     private synchronized void sendMessage(byte command) throws IBuddyException {
-    	open();
+        open();
         try {
             device.controlMsg(USB.REQ_TYPE_TYPE_CLASS | USB.REQ_TYPE_RECIP_INTERFACE, USB.REQ_SET_CONFIGURATION, 0x02, 0x01, INIT, INIT.length, 100, true);
         } catch (USBException e) {
-        	close();
+            close();
             throw new IBuddyException("Could not send message to i-Buddy", e);
         }
         byte[] commandMessage = getCommandMessage(command);
         try {
             device.controlMsg(USB.REQ_TYPE_TYPE_CLASS | USB.REQ_TYPE_RECIP_INTERFACE, USB.REQ_SET_CONFIGURATION, 0x02, 0x01, commandMessage, commandMessage.length, 100, true);
         } catch (USBException e) {
-        	close();
+            close();
             throw new IBuddyException("Could not send message to i-Buddy", e);
         }
         close();
