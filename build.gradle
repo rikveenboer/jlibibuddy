@@ -34,6 +34,7 @@ repositories {
 dependencies {
 	compile 'org.picocontainer:picocontainer:2.15'
 	compile 'com.github.boukefalos:jlibusb:0.5.7'
+	compile 'org.slf4j:slf4j-log4j12:1.+'
 }
 
 uploadArchives {

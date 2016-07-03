@@ -497,7 +497,7 @@ public class IBuddy {
     private synchronized void open() throws IBuddyException {
         device = USB.getDevice(DEVICE_VENDOR, DEVICE_PRODUCT);
         try {
-            device.open(1, 0, 0);
+            device.open(1, 1, 0);
         } catch (USBException e) {
             throw new IBuddyException("Could not open i-Buddy", e);
         }
